@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+import sys
+sys.path.append('./qpputils/')
 import argparse
 import glob
 import os
@@ -10,7 +11,7 @@ from functools import partial
 
 import pandas as pd
 
-from Timer import Timer
+from Timer.timer import Timer
 from crossval import InterTopicCrossValidation
 import pageRank.pr_eval as pr
 
@@ -168,7 +169,7 @@ class GeneratePredictions:
     def generate_clartiy(self, predictions_dir=None):
         print('\n -- Clarity -- \n')
         predictor_exe = '~/SetupFiles-indri-5.6/clarity.m-2/Clarity-Anna'
-        parameters = '~/QppUqvProj/Results/{}/test/clarityParam.xml'.format(self.corpus)
+        parameters = './indri_param_files/{}/test/clarityParam.xml'.format(self.corpus)
         running_param = '-fbDocs='
         if predictions_dir is None:
             predictions_dir = self.predictions_dir + 'clarity/predictions/'
@@ -179,8 +180,8 @@ class GeneratePredictions:
     def generate_wig(self, predictions_dir=None):
         print('\n -- WIG -- \n')
         predictor_exe = 'python3.6 ~/repos/IRQPP/wig.py'
-        ql_scores = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
-        qlc_scores = '~/QppUqvProj/Results/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
+        ql_scores = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        qlc_scores = './indri_param_files/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
         parameters = '{} {}'.format(ql_scores, qlc_scores)
         running_param = '-d '
         if predictions_dir is None:
@@ -192,8 +193,8 @@ class GeneratePredictions:
     def generate_nqc(self, predictions_dir=None):
         print('\n -- NQC -- \n')
         predictor_exe = 'python3.6 ~/repos/IRQPP/nqc.py'
-        ql_scores = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
-        qlc_scores = '~/QppUqvProj/Results/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
+        ql_scores = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        qlc_scores = './indri_param_files/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
         parameters = '{} {}'.format(ql_scores, qlc_scores)
         running_param = '-d '
         if predictions_dir is None:
@@ -205,8 +206,8 @@ class GeneratePredictions:
     def generate_smv(self, predictions_dir=None):
         print('\n -- SMV -- \n')
         predictor_exe = 'python3 ~/repos/IRQPP/smv.py'
-        ql_scores = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
-        qlc_scores = '~/QppUqvProj/Results/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
+        ql_scores = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        qlc_scores = './indri_param_files/{}/test/{}/logqlc.res'.format(self.corpus, self.qtype)
         parameters = '{} {}'.format(ql_scores, qlc_scores)
         running_param = '-d '
         if predictions_dir is None:
@@ -220,7 +221,7 @@ class GeneratePredictions:
         if self.gen_lists:
             self._generate_lists_qf()
         predictor_exe = 'python3.6 ~/repos/IRQPP/qf.py'
-        parameters = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        parameters = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
         running_param = '-d '
         if predictions_dir is None:
             predictions_dir = self.predictions_dir + 'qf/predictions/'
@@ -230,7 +231,7 @@ class GeneratePredictions:
 
     def _generate_lists_qf(self):
         predictor_exe = '~/SetupFiles-indri-5.6/runqueryql/IndriRunQueryQL'
-        parameters = '~/QppUqvProj/Results/{}/test/indriRunQF.xml'.format(self.corpus)
+        parameters = './indri_param_files/{}/test/indriRunQF.xml'.format(self.corpus)
         running_param = '-fbDocs='
         predictions_dir = self.predictions_dir + 'qf/lists/'
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param, lists=True)
@@ -240,20 +241,20 @@ class GeneratePredictions:
         if self.gen_lists:
             self._generate_lists_uef()
         predictor_exe = 'python3 ~/repos/IRQPP/uef/uef.py'
-        parameters = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        parameters = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
         running_param = '-d '
         predictions_dir = self.predictions_dir + 'uef/'
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param)
 
     def _generate_lists_uef(self):
         predictor_exe = 'python3 ~/repos/IRQPP/addWorkingsetdocs.py'
-        parameters = '~/QppUqvProj/Results/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
+        parameters = './indri_param_files/{}/test/{}/QL.res'.format(self.corpus, self.qtype)
         running_param = '-d '
         predictions_dir = self.predictions_dir + 'uef/data/'
         queries = predictions_dir + 'queriesUEF'
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param)
         predictor_exe = '~/SetupFiles-indri-5.6/runqueryql/IndriRunQueryQL'
-        parameters = '~/QppUqvProj/Results/{}/test/indriRunQF.xml'.format(self.corpus)
+        parameters = './indri_param_files/{}/test/indriRunQF.xml'.format(self.corpus)
         running_param = '-fbDocs='
         predictions_dir = self.predictions_dir + 'uef/lists/'
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param, lists=True, queries=queries)
@@ -276,7 +277,7 @@ class GeneratePredictions:
         print('----- Calculating {} single predictions results -----'.format(predictor))
         script = 'python3.6 ~/repos/IRQPP/singleUQV.py'
         raw_dir = os.path.normpath('{}/{}/predictions'.format(self.predictions_dir, predictor))
-        map_raw = '~/QppUqvProj/Results/{}/test/{}/QLmap1000'.format(self.corpus, self.qtype)
+        map_raw = './indri_param_files/{}/test/{}/QLmap1000'.format(self.corpus, self.qtype)
         res_files = glob.glob('{}/*predictions*'.format(raw_dir))
         for file in res_files:
             for func in SINGLE_FUNCTIONS:
@@ -888,7 +889,7 @@ def main(args):
     # generate = True
     # calc_predictions = True
 
-    base_dir = '~/QppUqvProj/Results/{}'.format(corpus)
+    base_dir = './indri_param_files/{}'.format(corpus)
     cv_map_file = '{}/test/2_folds_30_repetitions.json'.format(base_dir)
 
     if queries_type == 'aggregated' or queries_type == 'single':

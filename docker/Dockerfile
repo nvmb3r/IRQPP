@@ -4,7 +4,7 @@ FROM ubuntu:14.04
 # Get same version of GCC
 RUN apt-get clean
 RUN apt-get update -y --fix-missing 
-RUN apt-get install -y g++-4.4 build-essential git parallel vim wget zlibc zlib1g zlib1g-dev wget curl software-properties-common libssl-dev
+RUN apt-get install -y g++-4.4 build-essential git parallel vim wget zlibc zlib1g zlib1g-dev wget curl software-properties-common libssl-dev libbz2-dev nan liblzma-dev lzma-dev
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.4 10
 RUN update-alternatives --config g++ 
 RUN g++ --version
@@ -33,10 +33,12 @@ RUN wget --no-check-certificate https://sourceforge.net/projects/lemur/files/lem
 RUN tar xvfz indri-5.6.tar.gz
 RUN cd /indri-5.6 && \
     ./configure && \
-    make
+    make && \ 
+    make install
+
 
 # Get the paper's code
-RUN git clone https://github.com/Zendelo/IRQPP.git
+RUN git clone --recurse-submodules https://github.com/Zendelo/IRQPP.git
 
 # Generate requirments for the paper
 RUN pip3 install pipreqs && \
