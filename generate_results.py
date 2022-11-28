@@ -168,7 +168,7 @@ class GeneratePredictions:
 
     def generate_clartiy(self, predictions_dir=None):
         print('\n -- Clarity -- \n')
-        predictor_exe = '~/SetupFiles-indri-5.6/clarity.m-2/Clarity-Anna'
+        predictor_exe = '/indri-5.6/clarity.m-2/Clarity-Anna'
         parameters = './indri_param_files/{}/test/clarityParam.xml'.format(self.corpus)
         running_param = '-fbDocs='
         if predictions_dir is None:
@@ -230,7 +230,7 @@ class GeneratePredictions:
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param)
 
     def _generate_lists_qf(self):
-        predictor_exe = '~/SetupFiles-indri-5.6/runqueryql/IndriRunQueryQL'
+        predictor_exe = './indri-5.6/runqueryql/IndriRunQueryQL'
         parameters = './indri_param_files/{}/test/indriRunQF.xml'.format(self.corpus)
         running_param = '-fbDocs='
         predictions_dir = self.predictions_dir + 'qf/lists/'
@@ -253,7 +253,7 @@ class GeneratePredictions:
         predictions_dir = self.predictions_dir + 'uef/data/'
         queries = predictions_dir + 'queriesUEF'
         self.__run_predictor(predictions_dir, predictor_exe, parameters, running_param)
-        predictor_exe = '~/SetupFiles-indri-5.6/runqueryql/IndriRunQueryQL'
+        predictor_exe = './indri-5.6/runqueryql/IndriRunQueryQL'
         parameters = './indri_param_files/{}/test/indriRunQF.xml'.format(self.corpus)
         running_param = '-fbDocs='
         predictions_dir = self.predictions_dir + 'uef/lists/'
